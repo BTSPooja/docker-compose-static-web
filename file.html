@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docker Practice Dashboard</title>
+<style>
+  body { font-family: Arial; background: #f4f6f8; margin: 0; }
+  .sidebar { width: 200px; height: 100vh; background: #2c3e50; color: white; position: fixed; padding: 20px; }
+  .sidebar h2 { font-size: 20px; }
+  .sidebar a { color: white; text-decoration: none; display: block; margin: 15px 0; }
+  .main { margin-left: 220px; padding: 20px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  table, th, td { border: 1px solid #ccc; }
+  th, td { padding: 10px; text-align: center; }
+  th { background-color: #ecf0f1; }
+  .running { color: green; font-weight: bold; }
+  .stopped { color: red; font-weight: bold; }
+  button { padding: 5px 10px; margin: 2px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Docker Practice</h2>
+  <a href="#">Containers</a>
+  <a href="#">Volumes</a>
+  <a href="#">Networks</a>
+</div>
+
+<div class="main">
+  <h1>Mock Docker Dashboard</h1>
+  
+  <h3>Containers</h3>
+  <table id="containers-table">
+    <tr>
+      <th>Container Name</th>
+      <th>Status</th>
+      <th>Port</th>
+      <th>Volumes</th>
+      <th>Actions</th>
+    </tr>
+  </table>
+  <button onclick="addContainer()">Add Container</button>
+</div>
+
+<script>
+  let containerCount = 0;
+  const containersTable = document.getElementById('containers-table');
+  const samplePorts = [8080, 3000, 5000, 9000];
+  const sampleVolumes = ["mydata", "dbvol", "logs", "cache"];
+
+  function addContainer() {
+    containerCount++;
+    const name = "container_" + containerCount;
+    const status = Math.random() > 0.3 ? "running" : "stopped";
+    const port = samplePorts[Math.floor(Math.random() * samplePorts.length)];
+    const volume = sampleVolumes[Math.floor(Math.random() * sampleVolumes.length)];
+    
+    const row = containersTable.insertRow();
+    row.innerHTML = `
+      <td>${name}</td>
+      <td class="${status}">${status}</td>
+      <td>${port}</td>
+      <td>${volume}</td>
+      <td>
+        <button onclick="toggleStatus(this)">Toggle Status</button>
+        <button onclick="exposePort(this)">Expose Port</button>
+      </td>
+    `;
+  }
+
+  function toggleStatus(btn) {
+    const row = btn.parentNode.parentNode;
+    const statusCell = row.cells[1];
+    if(statusCell.innerText === "running") {
+      statusCell.innerText = "stopped";
+      statusCell.className = "stopped";
+    } else {
+      statusCell.innerText = "running";
+      statusCell.className = "running";
+    }
+  }
+
+  function exposePort(btn) {
+    const row = btn.parentNode.parentNode;
+    const port = row.cells[2].innerText;
+    alert(`Port ${port} is now exposed! (mock simulation)`);
+  }
+</script>
+
+</body>
+</html>
